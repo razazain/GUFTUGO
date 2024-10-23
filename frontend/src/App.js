@@ -6,14 +6,16 @@ import Chat from "./pages/Chat";
 
 function App() {
   return (
-    <ChakraProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Chat" element={<Chat />} />
-        </Routes>
-      </BrowserRouter>
-    </ChakraProvider>
+    <div className="App">
+      <ChakraProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/Chat" element={<Chat />} />
+          </Routes>
+        </BrowserRouter>
+      </ChakraProvider>
+    </div>
   );
 }
 
