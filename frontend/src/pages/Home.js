@@ -10,6 +10,8 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { Link } from "react-router-dom";
+import Login from "../components/Authentication/Login";
+import Signup from "../components/Authentication/Signup";
 
 const Home = () => {
   return (
@@ -39,21 +41,21 @@ const Home = () => {
         borderWidth="1px"
       >
         <Tabs>
-          <TabList>
-            <Tab>
+          <TabList mb="1em">
+            <Tab width="50%">
               <Link to="#members">Login</Link>
             </Tab>
-            <Tab>
+            <Tab width="50%">
               <Link to="#projects">Signup</Link>
             </Tab>
           </TabList>
 
           <TabPanels>
             <TabPanel>
-              <p>Login Form</p>
+              <Login />
             </TabPanel>
             <TabPanel>
-              <p>Signup Form</p>
+              <Signup />
             </TabPanel>
           </TabPanels>
         </Tabs>
