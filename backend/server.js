@@ -4,6 +4,8 @@ const dotenv = require("dotenv").config();
 const cors = require("cors");
 const connectDB = require("./config/db");
 const userRoute = require("./routes/userRoute");
+const {notFound, errorHandler} = require("./middlewares/errorMiddleware");
+
 
 const app = express();
 
@@ -21,6 +23,37 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/user", userRoute);
+app.use(notFound)
+app.use(errorHandler)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Start the Server
 const PORT = process.env.PORT || 5000;
