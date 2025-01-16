@@ -29,7 +29,7 @@ const Signup = () => {
   const [localPic, setLocalPic] = useState(null);
   const [picLoading, setPicLoading] = useState(false);
   const toast = useToast();
-  const navigate = useNavigate(); 
+ const navigate = useNavigate(); 
   const handleClick = () => setShow(!show);
 
   const postDetails = (pics) => {
@@ -95,19 +95,10 @@ const Signup = () => {
   };
 
   const submitHandler = async () => {
-    
-    // //for debuggind
-    // console.log("Submitting form data", {
-    //   name,
-    //   email,
-    //   password,
-    //   pic,
-    // });
-
     setPicLoading(true);
     if (!name || !email || !password || !confirmPassword) {
       toast({
-        title: "Please Fill all the Feilds",
+        title: "Please Fill all the Fields",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -115,7 +106,8 @@ const Signup = () => {
       });
       setPicLoading(false);
       return;
-    };
+    }
+  
     if (password !== confirmPassword) {
       toast({
         title: "Passwords Do Not Match",
@@ -127,12 +119,14 @@ const Signup = () => {
       setPicLoading(false);
       return;
     }
+  
     try {
       const config = {
         headers: {
           "Content-type": "application/json",
         },
       };
+  
       const { data } = await axios.post(
         "/api/user",
         {
@@ -143,7 +137,7 @@ const Signup = () => {
         },
         config
       );
-      console.log(data);
+  
       toast({
         title: "Registration Successful",
         status: "success",
@@ -151,12 +145,25 @@ const Signup = () => {
         isClosable: true,
         position: "bottom",
       });
+  
+      // Clear the form fields
+      setName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setPic("");
+      setLocalPic(null);
+  
+      // Store user info in localStorage and navigate
       localStorage.setItem("userInfo", JSON.stringify(data));
       setPicLoading(false);
-      navigate("/Chat");
+      navigate("/");
+  
+      // Refresh the page
+      window.location.reload();
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "Error Occurred!",
         description: error.response.data.message,
         status: "error",
         duration: 5000,
@@ -165,8 +172,8 @@ const Signup = () => {
       });
       setPicLoading(false);
     }
-   
   };
+  
 
   return (
     <VStack spacing="5px">
