@@ -1,9 +1,4 @@
-// import { Button } from "@chakra-ui/button";
-//  import { FormControl, FormLabel } from "@chakra-ui/form-control";
-// import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
-// import { VStack } from "@chakra-ui/layout";
 import { useState } from "react";
-
 import {
   Button,
   FormControl,
@@ -20,9 +15,6 @@ import { useNavigate } from "react-router-dom";
 
 
 
-
-
-
 const Login = () => {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState();
@@ -32,7 +24,6 @@ const Login = () => {
   const navigate = useNavigate(); 
  // const { setUser } = ChatState();
   const handleClick = () => setShow(!show);
-
 
 
   const submitHandler = async () => {
