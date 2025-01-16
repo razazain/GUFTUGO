@@ -10,44 +10,162 @@ import {
   Box,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { useToast } from "@chakra-ui/react";
+import axios from "axios"
+import { useNavigate } from "react-router-dom";
+
+
+
+
+
 
 const Signup = () => {
   const [show, setShow] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [pic, setPic] = useState("");
+  const [localPic, setLocalPic] = useState(null);
+  const [picLoading, setPicLoading] = useState(false);
+  const toast = useToast();
+  const navigate = useNavigate(); 
   const handleClick = () => setShow(!show);
 
-  const [Name, setName] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Password, setPassword] = useState("");
-  const [ConfirmPassword, setConfirmpassword] = useState("");
-  const [pic, setPic] = useState(null);
-  const [picError, setPicError] = useState("");
+  const postDetails = (pics) => {
+    setLocalPic(pics); // Set the file for local preview
+    setPicLoading(true);
 
-  const validateImage = (file) => {
-    const validTypes = ["image/jpeg", "image/png", "image/jpg"];
-    if (file && !validTypes.includes(file.type)) {
-      setPicError("Only JPEG or PNG images are allowed.");
-      return false;
+    if (!pics) {
+      toast({
+        title: "No file selected",
+        description: "Please upload a valid image.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      setPicLoading(false);
+      return;
     }
-    setPicError("");
-    return true;
+
+    // Validate image type
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "Guftugo-Chatapp");
+      data.append("cloud_name", "razazain");
+
+      fetch("https://api.cloudinary.com/v1_1/razazain/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPic(data.url.toString());
+          setPicLoading(false);
+          toast({
+            title: "Image uploaded successfully",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+          toast({
+            title: "Image upload failed",
+            description: "Please try again.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+          setPicLoading(false);
+        });
+    } else {
+      toast({
+        title: "Invalid file type",
+        description: "Please upload a JPEG or PNG image.",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+      });
+      setPicLoading(false);
+      return;
+    }
   };
 
-  const handlePicUpload = (e) => {
-    const file = e.target.files[0];
-    if (file && validateImage(file)) {
-      setPic(file);
-    }
-  };
+  const submitHandler = async () => {
+    
+    // //for debuggind
+    // console.log("Submitting form data", {
+    //   name,
+    //   email,
+    //   password,
+    //   pic,
+    // });
 
-  // submit function for the api we do later
-  const SubmitHandler = () => {
-    console.log(
-      "Submit Function is running properly on Submit button",
-      Name,
-      Email,
-      Password,
-      ConfirmPassword
-    );
+    setPicLoading(true);
+    if (!name || !email || !password || !confirmPassword) {
+      toast({
+        title: "Please Fill all the Feilds",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setPicLoading(false);
+      return;
+    };
+    if (password !== confirmPassword) {
+      toast({
+        title: "Passwords Do Not Match",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setPicLoading(false);
+      return;
+    }
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      const { data } = await axios.post(
+        "/api/user",
+        {
+          name,
+          email,
+          password,
+          pic,
+        },
+        config
+      );
+      console.log(data);
+      toast({
+        title: "Registration Successful",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setPicLoading(false);
+      navigate("/Chat");
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setPicLoading(false);
+    }
+   
   };
 
   return (
@@ -90,7 +208,7 @@ const Signup = () => {
           <Input
             type={show ? "text" : "password"}
             placeholder="Confirm Password"
-            onChange={(e) => setConfirmpassword(e.target.value)}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -102,17 +220,27 @@ const Signup = () => {
 
       <FormControl id="profile-picture">
         <FormLabel>Upload Profile Picture</FormLabel>
-        <Input type="file" accept="image/*" onChange={handlePicUpload} />
-        {picError && (
-          <Box color="red.500" mt={1} fontSize="sm">
-            {picError}
-          </Box>
-        )}
-        {pic && (
+        <Input
+          type="file"
+          accept="image/*"
+          onChange={(e) => postDetails(e.target.files[0])}
+        />
+        {localPic && (
           <Box mt={3}>
             <Image
-              src={URL.createObjectURL(pic)}
+              src={URL.createObjectURL(localPic)} 
               alt="Profile Preview"
+              boxSize="100px"
+              objectFit="cover"
+              borderRadius="full"
+            />
+          </Box>
+        )}
+        {pic && !localPic && (
+          <Box mt={3}>
+            <Image
+              src={pic} 
+              alt="Profile Picture"
               boxSize="100px"
               objectFit="cover"
               borderRadius="full"
@@ -121,7 +249,13 @@ const Signup = () => {
         )}
       </FormControl>
 
-      <Button colorScheme="teal" width="100%" mt={4} onClick={SubmitHandler}>
+      <Button
+        colorScheme="teal"
+        width="100%"
+        mt={4}
+        onClick={submitHandler}
+        isLoading={picLoading}
+      >
         Sign Up
       </Button>
     </VStack>
@@ -129,3 +263,8 @@ const Signup = () => {
 };
 
 export default Signup;
+
+
+
+
+//https://api.cloudinary.com/v1_1/razazain/image/upload

@@ -7,9 +7,27 @@ const generateToken = require("../config/generateToken");
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, pic } = req.body;
 
-  if (!name | !email | !password) {
+  // Email validation regex pattern
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  // Password validation regex pattern
+  const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/; // Minimum 8 characters, 1 uppercase, 1 number
+
+  if (!name || !email || !password) {
     res.status(400);
     throw new Error("Please Enter All The Fields");
+  }
+
+  // Validate email format
+  if (!emailRegex.test(email)) {
+    res.status(400);
+    throw new Error("Please Enter a Valid Email Address");
+  }
+
+  // Validate password format
+  if (!passwordRegex.test(password)) {
+    res.status(400);
+    throw new Error("Password must be at least 8 characters, include one uppercase letter and one number.");
   }
 
   const userExist = await User.findOne({ email });
@@ -35,9 +53,10 @@ const registerUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("Faile to create the user");
+    throw new Error("Failed to create the user");
   }
 });
+
 //--------------------------------------Register User Code END----------------------------------------------
 
 //-------------------------------Login User Code Start---------------------------------
