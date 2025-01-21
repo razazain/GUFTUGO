@@ -33,7 +33,7 @@ const Signup = () => {
   const handleClick = () => setShow(!show);
 
   const postDetails = (pics) => {
-    setLocalPic(pics); // Set the file for local preview
+    setLocalPic(pics); 
     setPicLoading(true);
 
     if (!pics) {
@@ -48,7 +48,7 @@ const Signup = () => {
       return;
     }
 
-    // Validate image type
+    
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
@@ -93,7 +93,6 @@ const Signup = () => {
       return;
     }
   };
-
   const submitHandler = async () => {
     setPicLoading(true);
     if (!name || !email || !password || !confirmPassword) {
@@ -119,14 +118,12 @@ const Signup = () => {
       setPicLoading(false);
       return;
     }
-  
     try {
       const config = {
         headers: {
           "Content-type": "application/json",
         },
       };
-  
       const { data } = await axios.post(
         "/api/user",
         {
@@ -145,8 +142,7 @@ const Signup = () => {
         isClosable: true,
         position: "bottom",
       });
-  
-      // Clear the form fields
+
       setName("");
       setEmail("");
       setPassword("");
@@ -154,12 +150,11 @@ const Signup = () => {
       setPic("");
       setLocalPic(null);
   
-      // Store user info in localStorage and navigate
+
       localStorage.setItem("userInfo", JSON.stringify(data));
       setPicLoading(false);
       navigate("/");
   
-      // Refresh the page
       window.location.reload();
     } catch (error) {
       toast({

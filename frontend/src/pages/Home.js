@@ -28,7 +28,7 @@ const Home = () => {
         borderWidth="1px"
       >
         <Text fontSize="4xl" fontFamily="Work sans" color="black">
-          GUFTUGO - گفتگو
+          <b>GUFTUGO - گفتگو</b>
         </Text>
       </Box>
 

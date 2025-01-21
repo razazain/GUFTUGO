@@ -4,6 +4,8 @@ const dotenv = require("dotenv").config();
 const cors = require("cors");
 const connectDB = require("./config/db");
 const userRoute = require("./routes/userRoute");
+const chatRoutes = require("./routes/chatRoutes");
+
 const {notFound, errorHandler} = require("./middlewares/errorMiddleware");
 
 
@@ -18,11 +20,11 @@ app.use(express.urlencoded({ extended: true }));
 connectDB();
 
 // Routes
-// app.get("/", (req, res) => {
-//   res.send("API is running");
-// });
-
 app.use("/api/user", userRoute);
+app.use("/api/chat", chatRoutes);
+
+
+
 app.use(notFound)
 app.use(errorHandler)
 
@@ -35,22 +37,9 @@ app.use(errorHandler)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// app.get("/", (req, res) => {
+//   res.send("API is running");
+// });
 
 
 
