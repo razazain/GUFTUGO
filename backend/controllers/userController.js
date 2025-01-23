@@ -54,6 +54,8 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 //--------------------------------------Register User Code END----------------------------------------------
+
+
 //-------------------------------Login User Code Start---------------------------------
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -75,6 +77,8 @@ const authUser = asyncHandler(async (req, res) => {
 });
 //----------------------------------Login User Code END-----------------------------------------
 
+
+//-------------------------------Search User Code Start---------------------------------
 // /api/user?search=zain
 const allUsers = asyncHandler (async (req, res)=>{
   const keyword = req.query.search
@@ -91,7 +95,7 @@ const allUsers = asyncHandler (async (req, res)=>{
 
 
 });
-
+//----------------------------------Search User Code END-----------------------------------------
 
 
 
