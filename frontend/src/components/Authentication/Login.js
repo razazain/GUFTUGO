@@ -21,8 +21,8 @@ const Login = () => {
   const [password, setPassword] = useState();
   const toast = useToast();
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); 
- // const { setUser } = ChatState();
+  const navigate = useNavigate();
+  // const { setUser } = ChatState();
   const handleClick = () => setShow(!show);
 
 
