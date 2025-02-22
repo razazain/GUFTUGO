@@ -27,7 +27,6 @@ const Login = () => {
 
 
   const submitHandler = async () => {
-    console.log(email, password);
     setLoading(true);
     if (!email || !password) {
       toast({

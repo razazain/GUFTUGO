@@ -2,6 +2,8 @@ const express = require("express");
 const chats = require("./data/data");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
+const path = require('path');
+const favicon = require('serve-favicon');
 const connectDB = require("./config/db");
 const userRoute = require("./routes/userRoute");
 const chatRoutes = require("./routes/chatRoutes");
@@ -16,6 +18,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 // Connect to the Database
 connectDB();
@@ -25,6 +28,7 @@ app.use("/api/user", userRoute);
 app.use("/api/chat", chatRoutes);
 app.use("/api/messsage", messageRoutes);
 
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 
 app.use(notFound)
