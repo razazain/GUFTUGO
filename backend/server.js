@@ -26,13 +26,16 @@ connectDB();
 // Routes
 app.use("/api/user", userRoute);
 app.use("/api/chat", chatRoutes);
-app.use("/api/messsage", messageRoutes);
+app.use("/api/message", messageRoutes);
+
+
+
 
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 
-app.use(notFound)
-app.use(errorHandler)
+app.use(notFound);
+app.use(errorHandler);
 
 
 
