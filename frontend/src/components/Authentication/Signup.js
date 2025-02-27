@@ -29,11 +29,12 @@ const Signup = () => {
   const [localPic, setLocalPic] = useState(null);
   const [picLoading, setPicLoading] = useState(false);
   const toast = useToast();
- const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const handleClick = () => setShow(!show);
 
+
   const postDetails = (pics) => {
-    setLocalPic(pics); 
+    setLocalPic(pics);
     setPicLoading(true);
 
     if (!pics) {
@@ -48,7 +49,7 @@ const Signup = () => {
       return;
     }
 
-    
+
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
@@ -106,7 +107,7 @@ const Signup = () => {
       setPicLoading(false);
       return;
     }
-  
+
     if (password !== confirmPassword) {
       toast({
         title: "Passwords Do Not Match",
@@ -134,7 +135,7 @@ const Signup = () => {
         },
         config
       );
-  
+
       toast({
         title: "Registration Successful",
         status: "success",
@@ -149,13 +150,16 @@ const Signup = () => {
       setConfirmPassword("");
       setPic("");
       setLocalPic(null);
-  
+
 
       localStorage.setItem("userInfo", JSON.stringify(data));
       setPicLoading(false);
       navigate("/");
-  
-      window.location.reload();
+
+
+      window.location.reload(); 
+
+
     } catch (error) {
       toast({
         title: "Error Occurred!",
@@ -168,7 +172,7 @@ const Signup = () => {
       setPicLoading(false);
     }
   };
-  
+
 
   return (
     <VStack spacing="5px">
@@ -230,7 +234,7 @@ const Signup = () => {
         {localPic && (
           <Box mt={3}>
             <Image
-              src={URL.createObjectURL(localPic)} 
+              src={URL.createObjectURL(localPic)}
               alt="Profile Preview"
               boxSize="100px"
               objectFit="cover"
@@ -241,7 +245,7 @@ const Signup = () => {
         {pic && !localPic && (
           <Box mt={3}>
             <Image
-              src={pic} 
+              src={pic}
               alt="Profile Picture"
               boxSize="100px"
               objectFit="cover"
