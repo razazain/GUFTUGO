@@ -29,6 +29,25 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 
 
+// ----------------DEPLOYMENT--------------------------------------------
+
+const __dirname1 = path.resolve();
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname1, "/frontend/build")));
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running..");
+  });
+}
+
+
+// ----------------------DEPLOYMENT--------------------------------
+
 
 
 app.get('/favicon.ico', (req, res) => res.status(204).end());
